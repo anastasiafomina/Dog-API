@@ -9,11 +9,25 @@ class App extends Component {
     }
   }
 
+  getRandomDog = () => {
+    fetch('https://dog.ceo/api/breeds/image/random')
+    .then((result) => {
+      return result.json()
+    })
+    .then((data) => {
+      this.setState({
+        imgUrl: data.message
+      })
+    })
+  }
+
   render() {
     return (
       <div className="container">
-        <button className="generateButton">
-          Get random dog
+        <button 
+          onClick={this.getRandomDog}
+          className="generateButton">
+            Get random dog
         </button>
         <img
           alt='dog'
