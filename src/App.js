@@ -5,18 +5,24 @@ class App extends Component {
   constructor(props) {
     super(props) 
     this.state = {
-      imgUrl: ''
+      imgUrl: '',
+      imgLoading: false
     }
   }
 
   getRandomDog = () => {
-    fetch('https://dog.ceo/api/breeds/image/random')
-    .then((result) => {
-      return result.json()
-    })
-    .then((data) => {
-      this.setState({
-        imgUrl: data.message
+    this.setState({
+      imgLoading: true
+    }, () => {
+      fetch('https://dog.ceo/api/breeds/image/random')
+      .then((result) => {
+        return result.json()
+      })
+      .then((data) => {
+        this.setState({
+          imgLoading: false,
+          imgUrl: data.message
+        })
       })
     })
   }
@@ -33,12 +39,15 @@ class App extends Component {
           className="generateButton">
             Get random dog
         </button>
+
+        {this.state.imgLoading ? <p>Loading...</p> : (
         <img
           alt='dog'
           src={this.state.imgUrl}
           className="dogImage"
-        >
-        </img>
+        />
+        )}
+      
       </div>
     );
   }
