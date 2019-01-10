@@ -5,7 +5,7 @@ class App extends Component {
   constructor(props) {
     super(props) 
     this.state = {
-      imgUrl: 'https://cs4.pikabu.ru/post_img/big/2014/03/19/10/1395243232_1089834701.jpg'
+      imgUrl: ''
     }
   }
 
@@ -19,6 +19,10 @@ class App extends Component {
         imgUrl: data.message
       })
     })
+  }
+
+  componentDidMount() {
+    this.getRandomDog()
   }
 
   render() {
