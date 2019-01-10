@@ -20,7 +20,6 @@ class App extends Component {
       })
       .then((data) => {
         this.setState({
-          imgLoading: false,
           imgUrl: data.message
         })
       })
@@ -31,22 +30,29 @@ class App extends Component {
     this.getRandomDog()
   }
 
+  onLoad = () => {
+    this.setState({ imgLoading: false })
+  }
+  
   render() {
+
+    const text = this.state.imgLoading ? "Loading..." : "Get random dog"
+
     return (
       <div className="container">
         <button 
           onClick={this.getRandomDog}
-          className="generateButton">
-            Get random dog
+          className="generateButton"
+          disabled={this.state.imgLoading}>
+            {text}
         </button>
 
-        {this.state.imgLoading ? <p>Loading...</p> : (
         <img
           alt='dog'
           src={this.state.imgUrl}
+          onLoad={this.onLoad}
           className="dogImage"
         />
-        )}
       
       </div>
     );
