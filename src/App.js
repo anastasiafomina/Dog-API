@@ -6,7 +6,8 @@ class App extends Component {
     super(props) 
     this.state = {
       imgUrl: '',
-      imgLoading: false
+      imgLoading: false,
+      listAllBreeds: []
     }
   }
 
@@ -26,8 +27,31 @@ class App extends Component {
     })
   }
 
+  getListAllBreeds = () => {
+    fetch('https://dog.ceo/api/breeds/list/all')
+    .then((result) => {
+      return result.json()
+    })
+    .then((data) => {
+      const keys = Object.keys(data.message)
+
+      this.setState({
+        listAllBreeds: keys
+      })
+    })
+  }
+
+  renderBreedOption = (breed) => {
+    return (
+      <option>
+        {breed}
+      </option>
+    )
+  }
+
   componentDidMount() {
     this.getRandomDog()
+    this.getListAllBreeds()
   }
 
   onLoad = () => {
@@ -38,8 +62,17 @@ class App extends Component {
 
     const text = this.state.imgLoading ? "Loading..." : "Get random dog"
 
+    const allBreeds = this.state.listAllBreeds.map(this.renderBreedOption)
+
     return (
       <div className="container">
+
+        <label htmlFor="selectBreed">Select dog breed</label>
+        <select name="selectBreed">
+          <option>All</option>
+          {allBreeds}
+        </select>
+
         <button 
           onClick={this.getRandomDog}
           className="generateButton"
