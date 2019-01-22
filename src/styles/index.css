@@ -3,10 +3,12 @@ body {
 }
 
 input,
-button {
+button,
+select {
   outline: none;
 }
 
-button {
+button,
+select {
   cursor: pointer;
 }

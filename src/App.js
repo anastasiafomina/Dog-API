@@ -7,7 +7,8 @@ class App extends Component {
     this.state = {
       imgUrl: '',
       imgLoading: false,
-      listAllBreeds: []
+      listAllBreeds: [],
+      selectedBreed: 'all'
     }
   }
 
@@ -15,7 +16,9 @@ class App extends Component {
     this.setState({
       imgLoading: true
     }, () => {
-      fetch('https://dog.ceo/api/breeds/image/random')
+      fetch(this.state.selectedBreed === 'all' ? 'https://dog.ceo/api/breeds/image/random' 
+        : `https://dog.ceo/api/breed/${this.state.selectedBreed}/images/random`
+      )
       .then((result) => {
         return result.json()
       })
@@ -34,7 +37,6 @@ class App extends Component {
     })
     .then((data) => {
       const keys = Object.keys(data.message)
-
       this.setState({
         listAllBreeds: keys
       })
@@ -43,10 +45,16 @@ class App extends Component {
 
   renderBreedOption = (breed) => {
     return (
-      <option>
+      <option key={breed}>
         {breed}
       </option>
     )
+  }
+
+  setNewBreed = (e) => {
+    this.setState({ 
+      selectedBreed: e.target.value.toLowerCase()
+    })
   }
 
   componentDidMount() {
@@ -56,6 +64,10 @@ class App extends Component {
 
   onLoad = () => {
     this.setState({ imgLoading: false })
+  }
+
+  selectAllBreeds = () => {
+    this.setState({ selectedBreed: 'all' })
   }
   
   render() {
@@ -68,8 +80,8 @@ class App extends Component {
       <div className="container">
 
         <label htmlFor="selectBreed">Select dog breed</label>
-        <select name="selectBreed">
-          <option>All</option>
+        <select name="selectBreed" className="breedSelect" onChange={this.setNewBreed}>
+          <option onClick={this.selectAllBreeds} key="all">All</option>
           {allBreeds}
         </select>
 
